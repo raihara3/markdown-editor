@@ -7,5 +7,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/raihara3/markdown-editor.git"
+  },
+  "dependencies": {
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
   }
 }
