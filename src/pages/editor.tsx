@@ -8,38 +8,26 @@ import { Link } from 'react-router-dom'
 import useStateWithStorage from "../hooks/use_state_with_storage"
 
 // components
+import Header from "../components/header"
 import Button from "../components/button"
 import SaveModal from "../components/saveModal"
 
 // utils
 import { putMemo } from "../indexeddb/memos"
 
-const Header = styled.header`
-  align-content: center;
-  display: flex;
-  font-size: 1.5rem;
-  height: 2rem;
-  justify-content: space-between;
-  left: 0;
-  line-height: 2rem;
-  padding: 0.5rem 1rem;
-  position: fixed;
-  right: 0;
-  top: 0;
-`
-
-const HeaderControl = styled.div`
-  height: 2rem;
-  display: flex;
-  align-content: center;
-`
-
-const Wrapper = styled.div`
+const Wrapper = styled.header`
   bottom: 0;
   left: 0;
   position: fixed;
   right: 0;
   top: 3rem;
+`
+
+const HeaderArea = styled.div`
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
 `
 
 const TextArea = styled.textarea`
@@ -73,17 +61,16 @@ const Editor: React.FC = () => {
 
   return (
     <>
-      <Header>
-        Markdown Editor
-        <HeaderControl>
+      <HeaderArea>
+        <Header title="Markdown Editor">
           <Button onClick={() => setIsShowModal(true)}>
             保存する
           </Button>
           <Link to="/history">
             履歴を見る
           </Link>
-        </HeaderControl>
-      </Header>
+        </Header>
+      </HeaderArea>
       <Wrapper>
         <TextArea
           onChange={(e) => setText(e.target.value)}
