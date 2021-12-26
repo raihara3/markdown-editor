@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const useStateWidthSotrage = (init: string, key: string): [string, (s:string) => void] => {
+const useStateWithStorage = (init: string, key: string): [string, (s: string) => void] => {
   const [value, setValue] = useState<string>(localStorage.getItem(key) || init)
 
   const setValueWithStorage = (nextValue: string): void => {
@@ -11,4 +11,4 @@ const useStateWidthSotrage = (init: string, key: string): [string, (s:string) =>
   return [value, setValueWithStorage]
 }
 
-export default useStateWidthSotrage
+export default useStateWithStorage
