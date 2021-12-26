@@ -6,9 +6,18 @@ import ReactMarkdown from "react-markdown"
 // hooks
 import useStateWithStorage from "../hooks/use_state_with_storage"
 
+// components
+import Button from "../components/button"
+
+// utils
+import { putMemo } from "../indexeddb/memos"
+
 const Header = styled.header`
+  align-content: center;
+  display: flex;
   font-size: 1.5rem;
   height: 2rem;
+  justify-content: space-between;
   left: 0;
   line-height: 2rem;
   padding: 0.5rem 1rem;
@@ -16,6 +25,13 @@ const Header = styled.header`
   right: 0;
   top: 0;
 `
+
+const HeaderControl = styled.div`
+  height: 2rem;
+  display: flex;
+  align-content: center;
+`
+
 const Wrapper = styled.div`
   bottom: 0;
   left: 0;
@@ -52,10 +68,19 @@ const STORAGE_KEY = "pages/editor:text"
 const Editor: React.FC = () => {
   const [text, setText] = useStateWithStorage("", STORAGE_KEY)
 
+  const saveMemo = ():void => {
+    putMemo("TITLE", text)
+  }
+
   return (
     <>
       <Header>
         Markdown Editor
+        <HeaderControl>
+          <Button onClick={saveMemo}>
+            保存する
+          </Button>
+        </HeaderControl>
       </Header>
       <Wrapper>
         <TextArea
