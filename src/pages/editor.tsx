@@ -2,6 +2,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import ReactMarkdown from "react-markdown"
+import { Link } from 'react-router-dom'
 
 // hooks
 import useStateWithStorage from "../hooks/use_state_with_storage"
@@ -78,6 +79,9 @@ const Editor: React.FC = () => {
           <Button onClick={() => setIsShowModal(true)}>
             保存する
           </Button>
+          <Link to="/history">
+            履歴を見る
+          </Link>
         </HeaderControl>
       </Header>
       <Wrapper>
