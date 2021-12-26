@@ -1,13 +1,15 @@
 // lib
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import ReactMarkdown from "react-markdown"
 import { Link } from 'react-router-dom'
 
 // components
 import Header from "../components/header"
 import Button from "../components/button"
 import SaveModal from "../components/saveModal"
+
+// worker
+import ConvertMarkdownWorker from "worker-loader!../worker/convert_markdown_worker"
 
 // utils
 import { putMemo } from "../indexeddb/memos"
@@ -55,11 +57,24 @@ interface Props {
  setText: (text: string) => void
 }
 
+const convertMarkdownWorker = new ConvertMarkdownWorker()
+
 const Editor: React.FC<Props> = ({
   text,
   setText
 }) => {
   const [isShowModal, setIsShowModal] = useState<boolean>(false)
+  const [html, setHtml] = useState("")
+
+  useEffect(() => {
+    convertMarkdownWorker.onmessage = (e) => {
+      setHtml(e.data.html)
+    }
+  }, [])
+
+  useEffect(() => {
+    convertMarkdownWorker.postMessage(text)
+  }, [text])
 
   return (
     <>
@@ -79,7 +94,7 @@ const Editor: React.FC<Props> = ({
           value={text}
         />
         <Preview>
-          <ReactMarkdown>{text}</ReactMarkdown>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </Preview>
       </Wrapper>
       {isShowModal && (
