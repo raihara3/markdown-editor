@@ -1,10 +1,13 @@
 // lib
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 // components
 import Header from '../components/header'
+
+// utils
+import { getMemos, MemoRecord } from "../indexeddb/memos"
 
 const HeaderArea = styled.div`
   position: fixed;
@@ -22,7 +25,41 @@ const Wrapper = styled.div`
   padding: 0 1rem;
 `
 
-const History: React.FC = () => {
+const Memo = styled.button`
+  display: block;
+  background-color: white;
+  border: 1px solid gray;
+  width: 100%;
+  padding: 1rem;
+  margin: 1rem 0;
+  text-align: left;
+`
+
+const MemoTitle = styled.div`
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+`
+
+const MemoText = styled.div`
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+interface Props {
+  setText: (text: string) => void
+}
+
+const History: React.FC<Props> = ({
+  setText
+}) => {
+  const [memos, setMemos] = useState<MemoRecord[]>([])
+  const history = useHistory()
+
+  useEffect(() => {
+    getMemos().then(m => setMemos(m))
+  }, [])
 
   return (
     <>
@@ -34,7 +71,20 @@ const History: React.FC = () => {
         </Header>
       </HeaderArea>
       <Wrapper>
-        TODO: 履歴表示
+        {memos.map(memo => {
+          return (
+            <Memo
+              key={memo.datetime}
+              onClick={() => {
+                setText(memo.text)
+                history.push("/editor")
+              }}
+            >
+              <MemoTitle>{memo.title}</MemoTitle>
+              <MemoText>{memo.text}</MemoText>
+            </Memo>
+          )
+        })}
       </Wrapper>
     </>
   )

@@ -4,9 +4,6 @@ import styled from "styled-components"
 import ReactMarkdown from "react-markdown"
 import { Link } from 'react-router-dom'
 
-// hooks
-import useStateWithStorage from "../hooks/use_state_with_storage"
-
 // components
 import Header from "../components/header"
 import Button from "../components/button"
@@ -53,11 +50,16 @@ const Preview = styled.div`
   width: 50vw;
 `
 
-const STORAGE_KEY = "pages/editor:text"
+interface Props {
+ text: string
+ setText: (text: string) => void
+}
 
-const Editor: React.FC = () => {
+const Editor: React.FC<Props> = ({
+  text,
+  setText
+}) => {
   const [isShowModal, setIsShowModal] = useState<boolean>(false)
-  const [text, setText] = useStateWithStorage("", STORAGE_KEY)
 
   return (
     <>
