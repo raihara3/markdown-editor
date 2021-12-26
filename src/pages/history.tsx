@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Header from '../components/header'
 
 // utils
-import { getMemos, MemoRecord } from "../indexeddb/memos"
+import { getMemos, getMemoPageCount, MemoRecord } from "../indexeddb/memos"
 
 const HeaderArea = styled.div`
   position: fixed;
@@ -17,12 +17,13 @@ const HeaderArea = styled.div`
 `
 
 const Wrapper = styled.div`
-  bottom: 0;
+  bottom: 3rem;
   left: 0;
   position: fixed;
   right: 0;
   top: 3rem;
   padding: 0 1rem;
+  overflow-y: scroll;
 `
 
 const Memo = styled.button`
@@ -47,6 +48,29 @@ const MemoText = styled.div`
   white-space: nowrap;
 `
 
+const Paging = styled.div`
+  bottom: 0;
+  height: 3rem;
+  left: 0;
+  line-height: 2rem;
+  padding: 0.5rem;
+  position: fixed;
+  right: 0;
+  text-align: center;
+`
+
+const PagingButton = styled.button`
+  background: none;
+  border: none;
+  display: inline-block;
+  height: 2rem;
+  padding: 0.5rem 1rem;
+
+  &:disabled {
+    color: silver;
+  }
+`
+
 interface Props {
   setText: (text: string) => void
 }
@@ -55,11 +79,22 @@ const History: React.FC<Props> = ({
   setText
 }) => {
   const [memos, setMemos] = useState<MemoRecord[]>([])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [maxPage, setMaxPage] = useState<number>(1)
   const history = useHistory()
 
   useEffect(() => {
-    getMemos().then(m => setMemos(m))
+    getMemos(1).then(m => setMemos(m))
+    getMemoPageCount().then(c => setMaxPage(c))
   }, [])
+
+  const hasNextPage:boolean = currentPage < maxPage
+  const hasPrevPage: boolean = currentPage > 1
+  const movePage = (targetPage: number) => {
+    if(targetPage < 1 || maxPage < targetPage) return
+    setCurrentPage(targetPage)
+    getMemos(targetPage).then(m => setMemos(m))
+  }
 
   return (
     <>
@@ -86,6 +121,21 @@ const History: React.FC<Props> = ({
           )
         })}
       </Wrapper>
+      <Paging>
+        <PagingButton
+          onClick={() => movePage(currentPage - 1)}
+          disabled={!hasPrevPage}
+        >
+          ＜
+        </PagingButton>
+        {currentPage} / {maxPage}
+        <PagingButton
+          onClick={() => movePage(currentPage + 1)}
+          disabled={!hasNextPage}
+        >
+          ＞
+        </PagingButton>
+      </Paging>
     </>
   )
 }

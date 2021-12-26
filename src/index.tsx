@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const STORAGE_KEY = "pages/editor:text"
+const STORAGE_KEY: string = "pages/editor:text"
 
 const Main: React.FC = () => {
   const [text, setText] = useStateWithStorage("", STORAGE_KEY)
