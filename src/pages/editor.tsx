@@ -1,5 +1,9 @@
-import * as React from "react"
+// lib
+import React from "react"
 import styled from "styled-components"
+
+// hooks
+import useStateWithStorage from "../hooks/use_state_with_storage"
 
 const Header = styled.header`
   font-size: 1.5rem;
@@ -42,14 +46,21 @@ const Preview = styled.div`
   width: 50vw;
 `
 
+const STORAGE_KEY = "pages/editor:text"
+
 const Editor: React.FC = () => {
+  const [text, setText] = useStateWithStorage("", STORAGE_KEY)
+
   return (
     <>
       <Header>
         Markdown Editor
       </Header>
       <Wrapper>
-        <TextArea value="テキスト入力エリア" />
+        <TextArea
+          onChange={(e) => setText(e.target.value)}
+          value={text}
+        />
         <Preview>プレビューエリア</Preview>
       </Wrapper>
     </>

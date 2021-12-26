@@ -1,7 +1,9 @@
-import * as React from "react"
+// lib
+import React from "react"
 import { render } from "react-dom"
 import { createGlobalStyle } from "styled-components"
 
+// component
 import Editor from "./pages/editor"
 
 const GlobalStyle = createGlobalStyle`
